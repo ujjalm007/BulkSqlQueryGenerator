@@ -16,12 +16,12 @@ public class QueryConfig {
 	private String dbSchema;
 	private String table;
 	private String queryType;
-	private int headerRowPos;
-	private int dataRecordStartPos;
+	private int headerRowPos=1;
+	private int dataRecordStartPos=2;
 	private Map<String,String> fileColToDbCallMap;
 	private Map<String,String> defaultValueMap;
 	private List<String> notNullFieldList;	
-	private boolean isIdToBeAdded;
-	private long startIndex;
-	private short incrementBy;
+	private boolean isIdToBeAdded=false;
+	private long startIndex=1;
+	private short incrementBy=1;
 }
