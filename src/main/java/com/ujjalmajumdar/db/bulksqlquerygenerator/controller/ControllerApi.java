@@ -25,6 +25,7 @@ public class ControllerApi {
 	
 	@PostMapping(path="/excelToSql")
 	public ResponseEntity<SqlResponse>convertExcelToSql(@RequestBody ExcelRequestBody excelRequestBody) {
+		sqlService.generateQueryFromExcel(excelRequestBody);
 		return null;
 	}
 
