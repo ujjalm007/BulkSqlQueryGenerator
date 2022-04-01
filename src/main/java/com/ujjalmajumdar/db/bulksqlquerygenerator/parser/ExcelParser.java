@@ -1,4 +1,4 @@
-package com.ujjalmajumdar.db.bulksqlquerygenerator.dao;
+package com.ujjalmajumdar.db.bulksqlquerygenerator.parser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,14 +10,11 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Component;
 
-import com.ujjalmajumdar.db.bulksqlquerygenerator.model.QueryConfig;
+public class ExcelParser extends Parser {
 
-@Component
-public class ExcelParcer {
-
-	public List<ArrayList<String>> readExcel(String filePath) {
+	@Override
+	public List<ArrayList<String>> parseFile(String filePath) {
 
 		List<ArrayList<String>> rowList = new ArrayList<ArrayList<String>>();
 		try {
@@ -31,7 +28,7 @@ public class ExcelParcer {
 
 			// Iterate through each rows one by one
 			Iterator<Row> rowIterator = sheet.iterator();
-			
+
 			while (rowIterator.hasNext()) {
 				Row row = rowIterator.next();
 				// For each row, iterate through all the columns
@@ -56,7 +53,7 @@ public class ExcelParcer {
 						break;
 					}
 				}
-				
+
 			}
 			workbook.close();
 			file.close();

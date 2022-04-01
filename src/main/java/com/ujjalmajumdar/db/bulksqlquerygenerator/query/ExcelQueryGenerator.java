@@ -1,20 +1,18 @@
-package com.ujjalmajumdar.db.bulksqlquerygenerator.dao;
+package com.ujjalmajumdar.db.bulksqlquerygenerator.query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
 import com.ujjalmajumdar.db.bulksqlquerygenerator.model.InsertQuery;
 import com.ujjalmajumdar.db.bulksqlquerygenerator.model.QueryConfig;
 
-@Component
-public class QueryGenerator {
-	public String generateQuery(List<ArrayList<String>> excelData, QueryConfig queryConfig) {
+public class ExcelQueryGenerator extends QueryGenerator {
 
-		if (0 == excelData.size())
+	@Override
+	public List<String> generateQuery(List<ArrayList<String>> data, QueryConfig queryConfig) {
+		if (0 == data.size())
 			return null;
 
 		InsertQuery insertQuery = new InsertQuery();
@@ -23,7 +21,7 @@ public class QueryGenerator {
 		Map<String, String> columnNamesMap;
 		if (queryConfig.isCaseSensitive()) {
 			columnNamesMap = new HashMap<>(queryConfig.getFileColToDbCalMap());
-			for (String column : excelData.get(0)) {
+			for (String column : data.get(0)) {
 				if (columnNamesMap.containsKey(column)) {
 					insertQuery.getColumnNames().add(columnNamesMap.get(column));
 				} else {
@@ -33,7 +31,7 @@ public class QueryGenerator {
 		} else {
 			columnNamesMap = new HashMap<>();
 			queryConfig.getFileColToDbCalMap().forEach((k, v) -> columnNamesMap.put(k.toUpperCase(), v.toUpperCase()));
-			for (String column : excelData.get(0)) {
+			for (String column : data.get(0)) {
 				String upperCaseCol = column.toUpperCase();
 				if (columnNamesMap.containsKey(upperCaseCol)) {
 					insertQuery.getColumnNames().add(columnNamesMap.get(upperCaseCol));
@@ -45,4 +43,5 @@ public class QueryGenerator {
 
 		return null;
 	}
+
 }

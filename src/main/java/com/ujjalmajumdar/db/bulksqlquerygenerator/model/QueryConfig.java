@@ -25,6 +25,8 @@ public class QueryConfig {
 	private int dataRecordStartPos=2;
 	//Are file column and table column names case sensitive
 	private boolean isCaseSensitive;
+	//File columns which need to be considered for upload
+	private List<String> fileActiveColList = null;
 	//File columns which need to be mapped to table columns
 	private Map<String,String> fileColToDbCalMap;
 	//Default values specific to table columns
@@ -76,6 +78,13 @@ public class QueryConfig {
 	}
 	public void setCaseSensitive(boolean isCaseSensitive) {
 		this.isCaseSensitive = isCaseSensitive;
+	}
+	
+	public List<String> getFileActiveColList() {
+		return fileActiveColList;
+	}
+	public void setFileActiveColList(List<String> fileActiveColList) {
+		this.fileActiveColList = fileActiveColList;
 	}
 	public Map<String, String> getFileColToDbCalMap() {
 		return fileColToDbCalMap;
