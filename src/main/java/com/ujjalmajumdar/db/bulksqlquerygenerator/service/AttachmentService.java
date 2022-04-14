@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ujjalmajumdar.db.bulksqlquerygenerator.entity.Attachment;
-import com.ujjalmajumdar.db.bulksqlquerygenerator.model.QueryStat;
 
 public interface AttachmentService {
 
+	public void init();
+	
 	public Attachment saveAttachment(MultipartFile file);
 
-	public Attachment getAttachment(String fileId) throws Exception;
+	public Attachment getAttachment(Long fileId) throws Exception;
 
+	
 }

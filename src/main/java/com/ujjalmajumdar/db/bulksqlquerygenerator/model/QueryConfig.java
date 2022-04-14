@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter 
 @Setter
 @NoArgsConstructor
-@Builder
+//@Builder
 public class QueryConfig {
 	//Target database schema
 	private String dbSchema;
@@ -40,8 +40,8 @@ public class QueryConfig {
 	//If ID to be added, it would be incremented by
 	private short idIncrementBy=1;
 	
-	public QueryConfig() {
-	}
+	//public QueryConfig() {
+	//}
 	public String getDbSchema() {
 		return dbSchema;
 	}
