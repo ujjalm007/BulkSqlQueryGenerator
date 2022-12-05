@@ -34,39 +34,44 @@ public class ExcelParser extends Parser {
 			// Get first/desired sheet from the workbook
 			XSSFSheet sheet = workbook.getSheetAt(0);
 
-			// Iterate through each rows one by one
-			Iterator<Row> rowIterator = sheet.iterator();
-
-			while (rowIterator.hasNext()) {
-				Row row = rowIterator.next();
-				// For each row, iterate through all the columns
-				Iterator<Cell> cellIterator = row.cellIterator();
-				ArrayList<String> colList = new ArrayList<>();
-				if(row.getRowNum() == excelRequestBody.getHeaderRecordPos()) {
-					headers = colList;
-				} else if(row.getRowNum() >= excelRequestBody.getDataRecordStartPos()) {
-					rowList.add(colList);
+			// Decide which rows to process
+			int rowStart = Math.max(excelRequestBody.getStartRow(), sheet.getFirstRowNum());
+			int rowEnd = Math.min(excelRequestBody.getEndRow(), sheet.getLastRowNum());
+			
+			for (int rowNum = rowStart; rowNum < rowEnd; rowNum++) {
+				Row row = sheet.getRow(rowNum);
+				if (row == null) {
+					// This whole row is empty
+					// Handle it as needed
+					continue;
 				}
-				
-				while (cellIterator.hasNext()) {
-					Cell cell = cellIterator.next();
-					// Check the cell type and format accordingly
-					switch (cell.getCellType()) {
-					case NUMERIC:
-						colList.add(String.valueOf(cell.getNumericCellValue()));
-						break;
-					case STRING:
-						colList.add(cell.getStringCellValue());
-						break;
-					case BOOLEAN:
-						colList.add(String.valueOf(cell.getBooleanCellValue()));
-						break;
-					default:
+				ArrayList<String> colList = new ArrayList<>();
+				int firstColumn = Math.max(excelRequestBody.getStartColumn(),0);
+				int lastColumn = Math.min(excelRequestBody.getEndColumn(),row.getLastCellNum());
+				for (int cn = firstColumn; cn < lastColumn; cn++) {
+					Cell cell = row.getCell(cn, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
+					if (cell == null) {
+						// The spreadsheet is empty in this cell
 						colList.add(null);
-						break;
+					} else {
+						// Do something useful with the cell's contents
+						switch (cell.getCellType()) {
+						case NUMERIC:
+							colList.add(String.valueOf(cell.getNumericCellValue()));
+							break;
+						case STRING:
+							colList.add(cell.getStringCellValue());
+							break;
+						case BOOLEAN:
+							colList.add(String.valueOf(cell.getBooleanCellValue()));
+							break;
+						default:
+							colList.add(null);
+							break;
+						}
 					}
 				}
-				
+				System.out.println(colList);
 				// Check if the processing will be done through DB
 				if(settings.isProcessingThroughDb()) {
 					//store in DB once rowLimit is reached
@@ -78,9 +83,9 @@ public class ExcelParser extends Parser {
 					}
 					
 				}
-
 			}
 			
+
 			//Insert the remaining rows into DB
 			if(rowList.size() >= 0) {
 				//Insert into DB *****
